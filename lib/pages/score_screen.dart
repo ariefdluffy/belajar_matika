@@ -1,6 +1,8 @@
-import 'package:belajar_matika/providers/game_providers.dart';
+import 'package:belajar_matika/providers/ads_provider.dart';
+import 'package:belajar_matika/providers/game_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class ScoreScreen extends ConsumerWidget {
   const ScoreScreen({super.key});
@@ -19,9 +21,18 @@ class ScoreScreen extends ConsumerWidget {
           }
 
           final scores = snapshot.data!;
+          final bannerAd = ref.watch(bannerAdProviderNew);
 
           return Column(
             children: [
+              if (bannerAd != null &&
+                  bannerAd.responseInfo !=
+                      null) // 🔹 Menampilkan Banner Ads jika berhasil dimuat
+                SizedBox(
+                  height: bannerAd.size.height.toDouble(),
+                  width: bannerAd.size.width.toDouble(),
+                  child: AdWidget(ad: bannerAd),
+                ),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(16),

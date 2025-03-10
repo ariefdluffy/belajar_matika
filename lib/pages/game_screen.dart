@@ -1,8 +1,10 @@
-import 'package:belajar_matika/providers/game_providers.dart';
+import 'package:belajar_matika/providers/ads_provider.dart';
+import 'package:belajar_matika/providers/game_provider.dart';
 import 'package:belajar_matika/providers/timer_providers.dart';
 import 'package:belajar_matika/utils/sound_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class GameScreen extends ConsumerWidget {
   const GameScreen({super.key});
@@ -11,6 +13,7 @@ class GameScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameProvider);
     final timer = ref.watch(timerProvider);
+    final bannerAd = ref.watch(bannerAdProvider);
     bool dialogShown = false;
 
     // Tampilkan dialog hanya jika game over
@@ -50,7 +53,7 @@ class GameScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tebak Jawaban Cepat",
+        title: const Text("Tebak Skor",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
         backgroundColor: Colors.blueAccent,
         centerTitle: true,
@@ -73,8 +76,8 @@ class GameScreen extends ConsumerWidget {
               LinearProgressIndicator(
                 value: gameState.timeLeft / 60, // Nilai antara 0.0 - 1.0
                 backgroundColor: Colors.grey[300],
-                color: Colors.red,
-                minHeight: 10,
+                color: Colors.red[400],
+                minHeight: 5,
               ),
               const SizedBox(
                 height: 10,
@@ -199,7 +202,18 @@ class GameScreen extends ConsumerWidget {
                     ),
                   );
                 }).toList(),
-              )
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              if (bannerAd != null &&
+                  bannerAd.responseInfo !=
+                      null) // 🔹 Menampilkan Banner Ads jika berhasil dimuat
+                SizedBox(
+                  height: bannerAd.size.height.toDouble(),
+                  width: bannerAd.size.width.toDouble(),
+                  child: AdWidget(ad: bannerAd),
+                ),
             ],
           ),
         ),

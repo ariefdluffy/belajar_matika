@@ -1,7 +1,7 @@
+import 'package:belajar_matika/pages/about_screen.dart';
 import 'package:belajar_matika/pages/score_screen.dart';
-import 'package:belajar_matika/pages/setting_screen.dart';
+import 'package:belajar_matika/providers/ads_provider.dart';
 import 'package:belajar_matika/providers/nav_provider.dart';
-import 'package:belajar_matika/providers/score_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'game_screen.dart';
@@ -23,7 +23,14 @@ class HomeScreen extends ConsumerWidget {
       body: screens[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
-        onTap: (index) => ref.read(navigationProvider.notifier).state = index,
+        onTap: (index) {
+          if (index == 1) {
+            ref
+                .read(adProvider)
+                .showInterstitialAd(); // Tampilkan iklan sebelum ke "About"
+          }
+          ref.read(navigationProvider.notifier).state = index; // Update halaman
+        },
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.videogame_asset), label: "Game"),
