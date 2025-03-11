@@ -1,3 +1,4 @@
+import 'package:belajar_matika/pages/home_screen.dart';
 import 'package:belajar_matika/providers/ads_provider.dart';
 import 'package:belajar_matika/providers/game_provider.dart';
 import 'package:belajar_matika/providers/timer_providers.dart';
@@ -58,13 +59,17 @@ class GameScreen extends ConsumerWidget {
       }
     }
 
+    bool gameExited = false; // Tambahkan flag global
+
     // Tampilkan dialog hanya jika game over
     if (gameState.isGameOver &&
         !dialogShown &&
+        !gameExited &&
         (ModalRoute.of(context)?.isCurrent ?? false)) {
       dialogShown = true; // Set flag agar dialog tidak muncul berulang kali
 
       Future.microtask(() {
+        if (!context.mounted) return;
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -82,11 +87,21 @@ class GameScreen extends ConsumerWidget {
                   // print("ini showDialog");
                   Navigator.of(context).pop();
                   ref.read(gameProvider.notifier).resetGame();
+                  gameExited = false;
                   dialogShown =
                       false; // Reset flag agar bisa muncul lagi di permainan berikutnya
                 },
                 child: const Text("Main Lagi"),
               ),
+              // TextButton(
+              //   onPressed: () {
+              //     Navigator.of(context).pop();
+              //     // ref.read(gameProvider.notifier).endGame();
+              //     dialogShown = true;
+              //     gameExited = true;
+              //   },
+              //   child: const Text("Keluar"),
+              // ),
             ],
           ),
         );

@@ -37,11 +37,18 @@ class GameNotifier extends StateNotifier<GameState> {
     startGame();
   }
 
+  void endGame() {
+    _timer?.cancel();
+    String username = ref.read(userProvider); // Ambil nama pengguna
+    state = state.copyWith(isGameOver: true);
+    saveScore(username, state.score); // Urutan parameter diperbaiki
+  }
+
   void startTimer() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (state.timeLeft <= 0) {
-        _endGame();
+        endGame();
         timer.cancel();
       } else {
         state = state.copyWith(timeLeft: state.timeLeft - 1);
@@ -62,17 +69,10 @@ class GameNotifier extends StateNotifier<GameState> {
 
     // **Pastikan hanya memanggil game over jika salah 3x atau skor sudah cukup**
     if (state.score >= 10 || state.mistakes >= 3) {
-      _endGame();
+      endGame();
     } else {
       state = state.copyWith(currentQuestion: Question.generate());
     }
-  }
-
-  void _endGame() {
-    _timer?.cancel();
-    String username = ref.read(userProvider); // Ambil nama pengguna
-    state = state.copyWith(isGameOver: true);
-    saveScore(username, state.score); // Urutan parameter diperbaiki
   }
 
   @override
