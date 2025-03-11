@@ -1,6 +1,7 @@
 import 'package:belajar_matika/providers/ads_provider.dart';
 import 'package:belajar_matika/providers/game_provider.dart';
 import 'package:belajar_matika/providers/timer_providers.dart';
+import 'package:belajar_matika/providers/user_provider.dart';
 import 'package:belajar_matika/utils/sound_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +16,47 @@ class GameScreen extends ConsumerWidget {
     final timer = ref.watch(timerProvider);
     final bannerAd = ref.watch(bannerAdProvider);
     bool dialogShown = false;
+
+    void showNameDialog(BuildContext context, WidgetRef ref) {
+      TextEditingController nameController = TextEditingController();
+
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          title: const Text("Masukkan Nama Anda"),
+          content: TextField(
+            controller: nameController,
+            decoration: const InputDecoration(hintText: "Nama"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (nameController.text.isNotEmpty) {
+                  ref.read(userProvider.notifier).state =
+                      nameController.text; // Simpan username
+                  Navigator.of(context).pop();
+                  ref
+                      .read(gameProvider.notifier)
+                      .startGame(); // Mulai game setelah nama diisi
+                }
+              },
+              child: const Text("Mulai"),
+            ),
+          ],
+        ),
+      );
+    }
+
+    void startGame(BuildContext context, WidgetRef ref) {
+      if (ref.read(userProvider).isEmpty) {
+        showNameDialog(context, ref); // Minta nama dulu
+      } else {
+        ref
+            .read(gameProvider.notifier)
+            .startGame(); // Jika nama sudah ada, langsung mulai
+      }
+    }
 
     // Tampilkan dialog hanya jika game over
     if (gameState.isGameOver &&
@@ -37,7 +79,7 @@ class GameScreen extends ConsumerWidget {
             actions: [
               TextButton(
                 onPressed: () {
-                  print("ini showDialog");
+                  // print("ini showDialog");
                   Navigator.of(context).pop();
                   ref.read(gameProvider.notifier).resetGame();
                   dialogShown =
@@ -115,7 +157,7 @@ class GameScreen extends ConsumerWidget {
                       color: Colors.blueAccent),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
               // Timer Animasi
               Stack(
@@ -125,7 +167,7 @@ class GameScreen extends ConsumerWidget {
                     width: 80,
                     height: 80,
                     child: CircularProgressIndicator(
-                      value: timer / 15,
+                      value: timer / 25,
                       strokeWidth: 8,
                       backgroundColor: Colors.white,
                       valueColor:
@@ -141,7 +183,7 @@ class GameScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
               // Soal
               Container(
@@ -166,7 +208,7 @@ class GameScreen extends ConsumerWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
 
               GridView.count(
                 shrinkWrap: true,
@@ -204,7 +246,14 @@ class GameScreen extends ConsumerWidget {
                 }).toList(),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () => startGame(context, ref),
+                child: const Text("Mulai Game"),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               if (bannerAd != null &&
                   bannerAd.responseInfo !=

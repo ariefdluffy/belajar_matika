@@ -3,6 +3,24 @@ import 'package:belajar_matika/providers/game_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future<List<Map<String, String>>> getHighScores() async {
+  final prefs = await SharedPreferences.getInstance();
+  final scores = prefs.getStringList('high_scores') ?? [];
+  final usernames = prefs.getStringList('usernames') ?? []; // Ambil username
+
+  List<Map<String, String>> highScores = [];
+
+  for (int i = 0; i < scores.length; i++) {
+    highScores.add({
+      'username': i < usernames.length ? usernames[i] : 'Guest',
+      'score': scores[i],
+    });
+  }
+
+  return highScores;
+}
 
 class ScoreScreen extends ConsumerWidget {
   const ScoreScreen({super.key});
@@ -11,17 +29,21 @@ class ScoreScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final getScore = ref.read(gameProvider.notifier).getHighScores();
 
+    final bannerAd = ref.watch(bannerAdProviderNew);
+
     return Scaffold(
       appBar: AppBar(title: const Text("Papan Skor")),
-      body: FutureBuilder<List<int>>(
-        future: ref.read(gameProvider.notifier).getHighScores(),
+      body: FutureBuilder<List<Map<String, String>>>(
+        future: getHighScores(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
+          final highScores = snapshot.data!;
 
-          final scores = snapshot.data!;
-          final bannerAd = ref.watch(bannerAdProviderNew);
+          if (highScores.isEmpty) {
+            return const Center(child: Text("Belum ada skor tersimpan"));
+          }
 
           return Column(
             children: [
@@ -35,13 +57,18 @@ class ScoreScreen extends ConsumerWidget {
                 ),
               Expanded(
                 child: ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: scores.length,
+                  itemCount: highScores.length,
                   itemBuilder: (context, index) {
+                    final scoreData = highScores[index];
                     return Card(
                       child: ListTile(
-                        leading: CircleAvatar(child: Text("${index + 1}")),
-                        title: Text("Skor: ${scores[index]}"),
+                        title: Text("Nama: ${highScores[index]['username']}",
+                            style: const TextStyle(fontSize: 18)),
+                        subtitle: Text("🏆 Skor: ${scoreData['score']}",
+                            style: const TextStyle(fontSize: 16)),
+                        leading: CircleAvatar(
+                          child: Text("${index + 1}"),
+                        ),
                       ),
                     );
                   },

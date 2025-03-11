@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:belajar_matika/models/question_model.dart';
+import 'package:belajar_matika/providers/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/game_state.dart';
@@ -69,8 +70,9 @@ class GameNotifier extends StateNotifier<GameState> {
 
   void _endGame() {
     _timer?.cancel();
-    saveScore(state.score);
+    String username = ref.read(userProvider); // Ambil nama pengguna
     state = state.copyWith(isGameOver: true);
+    saveScore(username, state.score); // Urutan parameter diperbaiki
   }
 
   @override
@@ -80,22 +82,42 @@ class GameNotifier extends StateNotifier<GameState> {
   }
 
   /// Simpan skor ke SharedPreferences dengan hanya 20 skor tertinggi
-  Future<void> saveScore(int score) async {
+  Future<void> saveScore(String username, int score) async {
     final prefs = await SharedPreferences.getInstance();
-    List<int> scores =
-        prefs.getStringList('high_scores')?.map(int.parse).toList() ?? [];
 
-    // Tambahkan skor baru
-    scores.add(score);
-    scores.sort((b, a) => a.compareTo(b)); // Urutkan dari skor tertinggi
+    // Ambil daftar skor dan username yang tersimpan
+    List<String> scores = prefs.getStringList('high_scores') ?? [];
+    List<String> usernames = prefs.getStringList('usernames') ?? [];
 
-    // Simpan hanya 20 skor tertinggi
-    if (scores.length > 20) {
-      scores = scores.sublist(0, 20);
+    // Pastikan jumlah skor dan usernames selalu sama
+    if (scores.length != usernames.length) {
+      scores.clear();
+      usernames.clear();
     }
 
+    // Tambahkan skor dan username baru
+    scores.add(score.toString());
+    usernames.add(username);
+
+    // Urutkan skor dari tertinggi ke terendah
+    List<Map<String, String>> sortedScores = [];
+    for (int i = 0; i < scores.length; i++) {
+      sortedScores.add({'username': usernames[i], 'score': scores[i]});
+    }
+
+    sortedScores.sort(
+        (b, a) => int.parse(a['score']!).compareTo(int.parse(b['score']!)));
+
+    // Simpan hanya 20 skor tertinggi
+    if (sortedScores.length > 20) {
+      sortedScores = sortedScores.sublist(0, 20);
+    }
+
+    // Simpan kembali ke SharedPreferences
     await prefs.setStringList(
-        'high_scores', scores.map((s) => s.toString()).toList());
+        'high_scores', sortedScores.map((e) => e['score']!).toList());
+    await prefs.setStringList(
+        'usernames', sortedScores.map((e) => e['username']!).toList());
   }
 
   /// Ambil daftar skor tertinggi
