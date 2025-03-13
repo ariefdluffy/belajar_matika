@@ -29,6 +29,8 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
   bool isGameOver = false;
 
   void _startTimer() {
+    _timer?.cancel();
+    _timeLeft = 60;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_timeLeft > 0) {
         setState(() {

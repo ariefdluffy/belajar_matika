@@ -25,7 +25,17 @@ class ScoreSusunKataController extends StateNotifier<List<ScoreSusunKata>> {
 
   Future<void> addScoreSusunKata(String name, int score) async {
     final newScore = ScoreSusunKata(name: name, score: score);
-    state = [...state, newScore];
+    List<ScoreSusunKata> updatedScores = [...state, newScore];
+
+    // Urutkan berdasarkan skor tertinggi
+    updatedScores.sort((a, b) => b.score.compareTo(a.score));
+
+    // Simpan hanya 20 skor terbaik
+    if (updatedScores.length > 20) {
+      updatedScores = updatedScores.sublist(0, 20);
+    }
+
+    state = updatedScores;
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
