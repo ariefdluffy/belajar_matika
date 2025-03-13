@@ -1,7 +1,7 @@
 name: belajar_matika
 description: "Game Sederhana."
 publish_to: "none"
-version: 1.1.1
+version: 1.1.2
 
 environment:
   sdk: ^3.5.3
@@ -32,11 +32,12 @@ flutter:
     - assets/animations/congrats.json
     - assets/animations/wrong.json
     - assets/animations/hello.json
-    - assets/icon/icon.png
+    - assets/icons/
+    # - assets/icon/icon.png
 
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/icon/icon.png" # Sesuaikan dengan path dan nama file ikon Anda
+  image_path: "assets/icons/logomatika.png" # Sesuaikan dengan path dan nama file ikon Anda
   adaptive_icon_background: "#FFFFFF" # Warna latar belakang untuk ikon adaptif (Android)
-  # adaptive_icon_foreground: "assets/icons/icon_foreground.png" # Ikon foreground untuk Android (opsional)
+  adaptive_icon_foreground: "assets/icons/logomatika_foreground.png" # Ikon foreground untuk Android (opsional)
