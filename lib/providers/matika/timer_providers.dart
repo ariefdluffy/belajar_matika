@@ -1,4 +1,4 @@
-import 'package:belajar_matika/providers/game_provider.dart';
+import 'package:belajar_matika/providers/matika/game_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 

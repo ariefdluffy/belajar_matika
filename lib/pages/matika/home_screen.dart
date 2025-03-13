@@ -1,8 +1,8 @@
-import 'package:belajar_matika/pages/about_screen.dart';
-import 'package:belajar_matika/pages/score_screen.dart';
+import 'package:belajar_matika/pages/matika/about_screen.dart';
+import 'package:belajar_matika/pages/matika/score_screen.dart';
 import 'package:belajar_matika/providers/ads_provider.dart';
 import 'package:belajar_matika/providers/nav_provider.dart';
-import 'package:belajar_matika/utils/device_info_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'game_screen.dart';

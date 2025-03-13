@@ -24,6 +24,8 @@ class DeviceInfoHelper {
         String brand = 'Unknown';
         String name = 'Unknown';
         String product = 'Unknown';
+        String device = 'Unknown';
+        String version = 'Unknown';
 
         if (Platform.isAndroid) {
           // Jika platform Android
@@ -36,6 +38,8 @@ class DeviceInfoHelper {
           // serialNumber = androidInfo.serialNumber;
           product = androidInfo.product;
           name = androidInfo.name;
+          device = androidInfo.device;
+          version = androidInfo.version.release;
         } else if (Platform.isIOS) {
           // Jika platform iOS
           IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
@@ -53,6 +57,8 @@ class DeviceInfoHelper {
             '- Brand: $brand\n'
             '- Name: $name\n'
             '- Produk: $product\n'
+            '- Device: $device\n'
+            '- Version: $version\n'
             // '- Serial Number: $serialNumber\n'
             '- Waktu: ${DateTime.now()}';
 
@@ -63,7 +69,7 @@ class DeviceInfoHelper {
         await _updateSendStatus();
       } else {
         Logger().i(
-            'Batas pengiriman pesan telah tercapai (maksimal 2 kali per jam).');
+            'Batas pengiriman pesan telah tercapai (maksimal 1 kali per jam).');
       }
     } catch (e) {
       throw Exception(
@@ -89,7 +95,7 @@ class DeviceInfoHelper {
     }
 
     // Periksa apakah jumlah pengiriman kurang dari 2
-    return sendCount < 2;
+    return sendCount < 1;
   }
 
   // Method untuk memperbarui status pengiriman

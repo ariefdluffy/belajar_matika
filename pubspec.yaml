@@ -16,6 +16,7 @@ dependencies:
   google_mobile_ads: ^5.3.1
   http: ^1.3.0
   logger: ^2.5.0
+  lottie: ^3.2.0
   shared_preferences: ^2.5.2
   url_launcher: ^6.3.1
 
@@ -28,6 +29,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/sounds/
+    - assets/animations/congrats.json
+    - assets/animations/wrong.json
+    - assets/animations/hello.json
     - assets/icon/icon.png
 
 flutter_launcher_icons:
