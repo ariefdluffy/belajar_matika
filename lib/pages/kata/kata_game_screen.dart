@@ -67,7 +67,7 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
   void _nextQuestion() {
     final gameNotifier = ref.read(wordProvider.notifier);
 
-    if (ref.read(wordProvider).currentQuestion < 10) {
+    if (ref.read(wordProvider).currentQuestion < 5) {
       setState(() {
         gameNotifier.nextQuestion(); // Pindah ke soal berikutnya
         _startTimer();
@@ -296,7 +296,7 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: _timeLeft <= 10 ? Colors.red : Colors.black)),
-                  Text("📌 Soal: ${gameState.currentQuestion}/10",
+                  Text("📌 Soal: ${gameState.currentQuestion}/5",
                       style: const TextStyle(fontSize: 20)),
                   Text("🏆 Skor: $_score",
                       style: const TextStyle(fontSize: 20)),
@@ -313,6 +313,11 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
                   Wrap(
                     children: List.generate(gameState.word.length, (index) {
                       return DragTarget<String>(
+                        onWillAcceptWithDetails:
+                            (DragTargetDetails<String> details) {
+                          return gameState.placedLetters[index] ==
+                              null; // Terima hanya jika kosong
+                        },
                         onAcceptWithDetails:
                             (DragTargetDetails<String> details) {
                           _playSound("sounds/drop.mp3");
@@ -386,7 +391,7 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () => ref.read(wordProvider.notifier).resetGame(),
+                  onPressed: () => _restartGame(),
                   child: const Text(
                     "Reset Game",
                     style: TextStyle(fontSize: 18, color: Colors.deepPurple),

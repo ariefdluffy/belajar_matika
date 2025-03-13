@@ -11,7 +11,8 @@ class KataScoreScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Skor Pemain"), automaticallyImplyLeading: false),
+          title: const Text("🏆 20 Skor Terbaik"),
+          automaticallyImplyLeading: false),
       body: scores.isEmpty
           ? const Center(child: Text("Belum ada skor"))
           : ListView.builder(

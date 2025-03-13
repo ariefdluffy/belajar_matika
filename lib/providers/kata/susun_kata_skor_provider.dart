@@ -40,6 +40,8 @@ class ScoreSusunKataController extends StateNotifier<List<ScoreSusunKata>> {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         'ScoreSusunKata', jsonEncode(state.map((e) => e.toJson()).toList()));
+
+    state = [...updatedScores];
   }
 
   Future<void> clearScoresSusunKata() async {

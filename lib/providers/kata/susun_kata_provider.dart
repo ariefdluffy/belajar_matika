@@ -94,12 +94,12 @@ class GameController extends StateNotifier<GameState> {
   }
 
   void nextQuestion() {
-    if (state.currentQuestion < 10) {
+    if (state.currentQuestion < 5) {
       state = _generateNewWord(state.currentQuestion + 1);
     }
   }
 
   void resetGame() {
-    state = _generateNewWord(state.currentQuestion);
+    state = _generateNewWord(1);
   }
 }
