@@ -67,7 +67,8 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
   void _nextQuestion() {
     final gameNotifier = ref.read(wordProvider.notifier);
 
-    if (ref.read(wordProvider).currentQuestion < 5) {
+    if (ref.read(wordProvider).currentQuestion <
+        ref.read(wordProvider).maxQuestions) {
       setState(() {
         gameNotifier.nextQuestion(); // Pindah ke soal berikutnya
         _startTimer();
@@ -312,7 +313,8 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: _timeLeft <= 10 ? Colors.red : Colors.black)),
-                  Text("📌 Soal: ${gameState.currentQuestion}/5",
+                  Text(
+                      "📌 Soal: ${gameState.currentQuestion}/${gameState.maxQuestions}",
                       style: const TextStyle(fontSize: 20)),
                   Text("🏆 Skor: $_score",
                       style: const TextStyle(fontSize: 20)),
@@ -443,8 +445,8 @@ class LetterBox extends StatelessWidget {
     return Opacity(
       opacity: opacity,
       child: Container(
-        width: 45,
-        height: 45,
+        width: 47,
+        height: 47,
         alignment: Alignment.center,
         margin: const EdgeInsets.all(5),
         decoration: BoxDecoration(

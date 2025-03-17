@@ -1,3 +1,4 @@
+import 'package:belajar_matika/pages/kata/about_kata_screen.dart';
 import 'package:belajar_matika/pages/kata/kata_score_screen.dart';
 import 'package:belajar_matika/pages/kata/kata_game_screen.dart';
 import 'package:belajar_matika/pages/matika/about_screen.dart';
@@ -22,7 +23,7 @@ class _HomeScreenKataState extends ConsumerState<HomeKataScreen> {
     final screens = [
       const KataGameScreen(),
       const KataScoreScreen(),
-      const AboutScreen(),
+      const AboutKataScreen(),
     ];
 
     return Scaffold(

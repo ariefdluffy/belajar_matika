@@ -10,12 +10,14 @@ class GameState {
   final List<String> shuffledLetters;
   final List<String?> placedLetters;
   final int currentQuestion;
+  final int maxQuestions;
 
   GameState({
     required this.word,
     required this.shuffledLetters,
     required this.placedLetters,
     required this.currentQuestion,
+    this.maxQuestions = 10,
   });
 
   GameState copyWith({
@@ -23,12 +25,14 @@ class GameState {
     List<String>? shuffledLetters,
     List<String?>? placedLetters,
     int? currentQuestion,
+    int? maxQuestions,
   }) {
     return GameState(
       word: word ?? this.word,
       shuffledLetters: shuffledLetters ?? this.shuffledLetters,
       placedLetters: placedLetters ?? this.placedLetters,
       currentQuestion: currentQuestion ?? this.currentQuestion,
+      maxQuestions: maxQuestions ?? this.maxQuestions,
     );
   }
 }
@@ -99,7 +103,7 @@ class GameController extends StateNotifier<GameState> {
   //   }
   // }
   void nextQuestion() {
-    if (state.currentQuestion < 5) {
+    if (state.currentQuestion < state.maxQuestions) {
       GameState newGameState = _generateNewWord(state.currentQuestion + 1);
 
       state = state.copyWith(

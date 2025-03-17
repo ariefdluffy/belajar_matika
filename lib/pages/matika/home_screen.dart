@@ -1,3 +1,4 @@
+import 'package:belajar_matika/pages/kata/about_kata_screen.dart';
 import 'package:belajar_matika/pages/matika/about_screen.dart';
 import 'package:belajar_matika/pages/matika/score_screen.dart';
 import 'package:belajar_matika/providers/ads_provider.dart';
