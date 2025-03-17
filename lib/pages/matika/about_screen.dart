@@ -1,6 +1,7 @@
 import 'package:belajar_matika/utils/device_info_helper.dart';
 import 'package:belajar_matika/utils/tele_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,9 +15,8 @@ class AboutScreen extends StatefulWidget {
 class _AboutScreenState extends State<AboutScreen> {
   final DeviceInfoHelper deviceInfoHelper = DeviceInfoHelper(
     telegramHelper: TelegramHelper(
-      botToken:
-          '7678341666:AAH_6GTin6WCzxx0zOoySoeZfz6b8FgRfFU', // Ganti dengan token bot Anda
-      chatId: '111519789', // Ganti dengan chat ID Anda
+      botToken: dotenv.env['BOT_TOKEN'] ?? '', // Ganti dengan token bot Anda
+      chatId: dotenv.env['CHAT_ID'] ?? '', // Ganti dengan chat ID Anda
     ),
   );
   bool isLoading = true;

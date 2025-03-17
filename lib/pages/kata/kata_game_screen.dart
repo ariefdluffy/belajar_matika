@@ -21,7 +21,7 @@ class KataGameScreen extends ConsumerStatefulWidget {
 class _KataGameScreenState extends ConsumerState<KataGameScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
 
-  String playerName = "";
+  String playerName = "Guest";
 
   Timer? _timer;
   int _timeLeft = 60;
@@ -82,10 +82,11 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
       _score = 0;
       _timeLeft = 60;
       isGameOver = false; // Reset flag game selesai
+      _showNameInputDialog();
     });
 
     ref.read(wordProvider.notifier).resetGame(); // Reset soal
-    _startTimer(); // Mulai timer baru
+    // _startTimer(); // Mulai timer baru
   }
 
   void _endGame() {
@@ -171,9 +172,12 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              ref.read(wordProvider.notifier).resetGame();
+              setState(() {
+                _score += 10; // Tambah skor jika benar
+              });
+              _nextQuestion(); // Pindah ke soal berikutnya
             },
-            child: const Text("Main Lagi"),
+            child: const Text("Lanjut"),
           ),
         ],
       ),
@@ -194,6 +198,18 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Tombol X di pojok kanan atas
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.red),
+                    onPressed: () {
+                      _timer?.cancel();
+                      Navigator.pop(
+                          context); // Tutup dialog tanpa menyimpan nama
+                    },
+                  ),
+                ),
                 Lottie.asset("assets/animations/hello.json",
                     width: 120, height: 120),
                 const SizedBox(height: 10),
@@ -255,7 +271,7 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () => _showNameInputDialog());
+    // Future.delayed(Duration.zero, () => _showNameInputDialog());
   }
 
   @override
@@ -315,8 +331,9 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
                       return DragTarget<String>(
                         onWillAcceptWithDetails:
                             (DragTargetDetails<String> details) {
-                          return gameState.placedLetters[index] ==
-                              null; // Terima hanya jika kosong
+                          // return gameState.placedLetters[index] == null;
+                          return index < gameState.placedLetters.length &&
+                              gameState.placedLetters[index] == null;
                         },
                         onAcceptWithDetails:
                             (DragTargetDetails<String> details) {
@@ -340,17 +357,26 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
                                   offset: Offset(2, 2),
                                 )
                               ],
-                              color: gameState.placedLetters[index] == null
-                                  ? Colors.white.withOpacity(0.8)
-                                  : Colors.greenAccent,
+                              // color: gameState.placedLetters[index] == null
+                              //     ? Colors.white.withOpacity(0.8)
+                              //     : Colors.greenAccent,
+                              color: (index < gameState.placedLetters.length &&
+                                      gameState.placedLetters[index] != null)
+                                  ? Colors.greenAccent
+                                  : Colors.grey[200],
                             ),
                             child: Text(
-                              gameState.placedLetters[index] ?? "",
+                              (index < gameState.placedLetters.length)
+                                  ? (gameState.placedLetters[index] ?? "")
+                                  : "",
                               style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
+                                  fontSize: 24, fontWeight: FontWeight.bold),
+                              // child: Text(
+                              //   gameState.placedLetters[index] ?? "",
+                              //   style: const TextStyle(
+                              //     fontSize: 20,
+                              //     fontWeight: FontWeight.bold,
+                              //     color: Colors.black,)
                             ),
                           );
                         },
@@ -393,7 +419,7 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
                   ),
                   onPressed: () => _restartGame(),
                   child: const Text(
-                    "Reset Game",
+                    "Start Game",
                     style: TextStyle(fontSize: 18, color: Colors.deepPurple),
                   ),
                 ),

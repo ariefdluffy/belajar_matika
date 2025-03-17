@@ -53,7 +53,7 @@ class GameController extends StateNotifier<GameState> {
     "TERONG", "KACANG",
     "TEBU", "TEH", "ANGGUR", "RAMBU", "NANAS", "DURIAN", "SALAK", "JAMBU",
     "KOPI", "KAKAO",
-    "ASAM", "BENGK", "JATI", "CEMAR", "MAWAR", "FLORA", "SERAI", "DANDA",
+    "ASAM", "BENGK", "JATI", "CEMAR", "MAWAR", "FLORA", "SERAI",
     "BUNGA",
 
     // Alam
@@ -63,7 +63,7 @@ class GameController extends StateNotifier<GameState> {
     "SALJU", "ANGIN",
     "BULAN", "BINTANG", "CAHAYA", "TITIK", "PANTAI", "CERAH",
     "KAPUR", "TAMAN", "SEJUK", "SURYA", "MERAH",
-    "SUMUR", "JERAM"
+    "SUMUR"
   ];
 
   static GameState _generateNewWord(int questionNumber) {
@@ -93,9 +93,22 @@ class GameController extends StateNotifier<GameState> {
     return state.placedLetters.join() == state.word;
   }
 
+  // void nextQuestion() {
+  //   if (state.currentQuestion < 5) {
+  //     state = _generateNewWord(state.currentQuestion + 1);
+  //   }
+  // }
   void nextQuestion() {
     if (state.currentQuestion < 5) {
-      state = _generateNewWord(state.currentQuestion + 1);
+      GameState newGameState = _generateNewWord(state.currentQuestion + 1);
+
+      state = state.copyWith(
+        currentQuestion: state.currentQuestion + 1,
+        word: newGameState.word,
+        shuffledLetters: newGameState.shuffledLetters,
+        placedLetters: List.filled(
+            newGameState.word.length, null), // Reset sesuai kata baru
+      );
     }
   }
 
