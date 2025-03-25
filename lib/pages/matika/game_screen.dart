@@ -6,6 +6,7 @@ import 'package:belajar_matika/utils/device_info_helper.dart';
 import 'package:belajar_matika/utils/sound_helper.dart';
 import 'package:belajar_matika/utils/tele_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logger/logger.dart';
@@ -23,9 +24,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   final DeviceInfoHelper deviceInfoHelper = DeviceInfoHelper(
     telegramHelper: TelegramHelper(
-      botToken:
-          '7678341666:AAH_6GTin6WCzxx0zOoySoeZfz6b8FgRfFU', // Ganti dengan token bot Anda
-      chatId: '111519789', // Ganti dengan chat ID Anda
+      botToken: dotenv.env['BOT_TOKEN'] ?? '', // Ganti dengan token bot Anda
+      chatId: dotenv.env['CHAT_ID'] ?? '', // Ganti dengan chat ID Anda
     ),
   );
   bool isLoading = true;
@@ -103,7 +103,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         !dialogShown &&
         !gameExited &&
         (ModalRoute.of(context)?.isCurrent ?? false)) {
-      dialogShown = true; // Set flag agar dialog tidak muncul berulang kali
+      dialogShown = true;
 
       Future.microtask(() {
         if (!context.mounted) return;

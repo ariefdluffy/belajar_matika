@@ -6,6 +6,7 @@ class GameState {
   final int timeLeft;
   final bool isGameOver;
   final Question currentQuestion;
+  final int questionCount;
 
   GameState({
     required this.score,
@@ -13,6 +14,7 @@ class GameState {
     required this.timeLeft,
     required this.isGameOver,
     required this.currentQuestion,
+    required this.questionCount,
   });
 
   GameState copyWith({
@@ -21,6 +23,7 @@ class GameState {
     int? timeLeft,
     bool? isGameOver,
     Question? currentQuestion,
+    int? questionCount,
   }) {
     return GameState(
       score: score ?? this.score,
@@ -28,6 +31,7 @@ class GameState {
       timeLeft: timeLeft ?? this.timeLeft,
       isGameOver: isGameOver ?? this.isGameOver,
       currentQuestion: currentQuestion ?? this.currentQuestion,
+      questionCount: questionCount ?? this.questionCount,
     );
   }
 }

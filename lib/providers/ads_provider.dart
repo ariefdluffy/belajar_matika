@@ -79,7 +79,7 @@ final bannerAdProviderNew = Provider.autoDispose<BannerAd?>((ref) {
     listener: BannerAdListener(
       onAdLoaded: (ad) => ref.onDispose(() => ad.dispose()),
       onAdFailedToLoad: (ad, error) {
-        Logger().e("Ad Failed to Load: $error");
+        Logger().i("Ad Failed to Load: $error");
         ad.dispose();
       },
     ),

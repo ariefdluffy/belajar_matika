@@ -33,7 +33,7 @@ class _AdBannerSusunKataNativeDepanState
         },
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
-          Logger().e('Native Ad failed to load: $error');
+          Logger().i('Native Ad failed to load: $error');
         },
       ),
       nativeTemplateStyle: NativeTemplateStyle(
