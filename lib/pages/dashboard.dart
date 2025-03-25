@@ -1,4 +1,4 @@
-import 'package:belajar_matika/helper/ads_banner_susun_kata_bawah.dart';
+import 'package:belajar_matika/ads/ads_banner_susun_kata_native_depan.dart';
 import 'package:belajar_matika/pages/kata/home_kata_screen.dart';
 import 'package:belajar_matika/pages/kata/kata_game_screen.dart';
 import 'package:belajar_matika/pages/matika/home_screen.dart';
@@ -92,7 +92,7 @@ class DashboardScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                const Expanded(child: AdBannerSusunKataBawah()),
+                const Expanded(child: AdBannerSusunKataNativeDepan()),
               ],
             ),
           ),

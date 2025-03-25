@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:belajar_matika/providers/ads_provider.dart';
 import 'package:belajar_matika/providers/matika/game_provider.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +34,19 @@ class ScoreScreen extends ConsumerWidget {
     final bannerAd = ref.watch(bannerAdProviderNew);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Papan Skor")),
+      appBar: AppBar(
+        title: const Text(
+          "🏆 20 Skor Terbaik",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+        automaticallyImplyLeading: false,
+      ),
       body: FutureBuilder<List<Map<String, String>>>(
         future: getHighScores(),
         builder: (context, snapshot) {
@@ -55,19 +69,25 @@ class ScoreScreen extends ConsumerWidget {
                   width: bannerAd.size.width.toDouble(),
                   child: AdWidget(ad: bannerAd),
                 ),
+              const SizedBox(
+                height: 10,
+              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: highScores.length,
                   itemBuilder: (context, index) {
                     final scoreData = highScores[index];
-                    return Card(
-                      child: ListTile(
-                        title: Text("Nama: ${highScores[index]['username']}",
-                            style: const TextStyle(fontSize: 18)),
-                        subtitle: Text("🏆 Skor: ${scoreData['score']}",
-                            style: const TextStyle(fontSize: 16)),
-                        leading: CircleAvatar(
-                          child: Text("${index + 1}"),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Card(
+                        child: ListTile(
+                          title: Text("Nama: ${highScores[index]['username']}",
+                              style: const TextStyle(fontSize: 18)),
+                          subtitle: Text("🏆 Skor: ${scoreData['score']}",
+                              style: const TextStyle(fontSize: 16)),
+                          leading: CircleAvatar(
+                            child: Text("${index + 1}"),
+                          ),
                         ),
                       ),
                     );

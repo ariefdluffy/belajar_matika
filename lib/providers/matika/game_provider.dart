@@ -62,7 +62,7 @@ class GameNotifier extends StateNotifier<GameState> {
     bool isCorrect = selectedAnswer == state.currentQuestion.answer;
 
     if (isCorrect) {
-      state = state.copyWith(score: state.score + 1);
+      state = state.copyWith(score: state.score + 10);
     } else {
       state = state.copyWith(mistakes: state.mistakes + 1);
     }

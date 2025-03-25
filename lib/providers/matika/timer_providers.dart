@@ -10,11 +10,11 @@ class TimerNotifier extends StateNotifier<int> {
   Timer? _timer;
   final Ref ref;
 
-  TimerNotifier(this.ref) : super(25); // Timer mulai dari 5 detik
+  TimerNotifier(this.ref) : super(15); // Timer mulai dari 5 detik
 
   void startTimer() {
     _timer?.cancel();
-    state = 25; // Reset timer
+    state = 15; // Reset timer
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (state == 1) {
         ref
@@ -29,6 +29,6 @@ class TimerNotifier extends StateNotifier<int> {
 
   void resetTimer() {
     _timer?.cancel();
-    state = 25;
+    state = 15;
   }
 }

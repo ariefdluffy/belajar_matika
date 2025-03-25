@@ -139,8 +139,13 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tebak Skor",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+        title: const Text(
+          "Tebak Skor",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
         backgroundColor: Colors.blueAccent,
         centerTitle: true,
       ),
@@ -211,7 +216,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     width: 80,
                     height: 80,
                     child: CircularProgressIndicator(
-                      value: timer / 25,
+                      value: timer / 15,
                       strokeWidth: 8,
                       backgroundColor: Colors.white,
                       valueColor:

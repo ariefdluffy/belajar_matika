@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logger/logger.dart';
 
-class AdBannerSusunKataBawah extends StatefulWidget {
-  const AdBannerSusunKataBawah({super.key});
+class AdBannerSusunKataNativeDepan extends StatefulWidget {
+  const AdBannerSusunKataNativeDepan({super.key});
 
   @override
-  _AdBannerSusunKataBawahState createState() => _AdBannerSusunKataBawahState();
+  _AdBannerSusunKataNativeDepanState createState() =>
+      _AdBannerSusunKataNativeDepanState();
 }
 
-class _AdBannerSusunKataBawahState extends State<AdBannerSusunKataBawah> {
+class _AdBannerSusunKataNativeDepanState
+    extends State<AdBannerSusunKataNativeDepan> {
   NativeAd? _nativeAd;
   bool _isAdLoaded = false;
 

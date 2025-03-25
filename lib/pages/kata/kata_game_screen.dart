@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:belajar_matika/helper/ads_banner_susun_kata_atas.dart';
-import 'package:belajar_matika/helper/ads_banner_susun_kata_bawah.dart';
+import 'package:belajar_matika/ads/ads_banner_susun_kata_atas.dart';
+import 'package:belajar_matika/ads/ads_banner_susun_kata_bawah.dart';
+import 'package:belajar_matika/ads/ads_banner_susun_kata_native_depan.dart';
 import 'package:belajar_matika/providers/kata/susun_kata_provider.dart';
 import 'package:belajar_matika/providers/kata/susun_kata_skor_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 // import 'package:lottie/lottie.dart';
 
@@ -173,9 +173,9 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              setState(() {
-                _score += 10; // Tambah skor jika benar
-              });
+              // setState(() {
+              //   _score += 10; // Tambah skor jika benar
+              // });
               _nextQuestion(); // Pindah ke soal berikutnya
             },
             child: const Text("Lanjut"),
@@ -282,8 +282,14 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Game Susun Kata",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        title: const Text(
+          "Game Susun Kata",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
         elevation: 0,
@@ -403,7 +409,7 @@ class _KataGameScreenState extends ConsumerState<KataGameScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // const Expanded(child: AdBannerSusunKataBawah()),
+            const AdBannerSusunKataBawah(),
 
             // Tombol Reset Game di Bagian Bawah
             Align(

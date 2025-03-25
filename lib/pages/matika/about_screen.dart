@@ -45,10 +45,17 @@ class _AboutScreenState extends State<AboutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tentang Aplikasi"),
-        centerTitle: true,
+        title: const Text(
+          "Tentang Aplikasi",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.blueAccent,
-        elevation: 0,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -63,18 +70,18 @@ class _AboutScreenState extends State<AboutScreen> {
                   bottomRight: Radius.circular(30),
                 ),
               ),
-              child: const Column(
+              child: Column(
                 children: [
-                  // ClipRRect(
-                  //   borderRadius: BorderRadius.circular(50),
-                  //   child: Image.asset(
-                  //     "assets/logo.png", // Ganti dengan logo aplikasi
-                  //     width: 80,
-                  //     height: 80,
-                  //   ),
-                  // ),
-                  SizedBox(height: 10),
-                  Text(
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.asset(
+                      "assets//logo/logomatika.png", // Ganti dengan logo aplikasi
+                      width: 80,
+                      height: 80,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
                     "Tebak Skor",
                     style: TextStyle(
                       fontSize: 22,
@@ -82,7 +89,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       color: Colors.white,
                     ),
                   ),
-                  Text(
+                  const Text(
                     "Belajar matematika dengan cara yang menyenangkan!",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white70),
@@ -117,31 +124,37 @@ class _AboutScreenState extends State<AboutScreen> {
               isClickable: true,
               onTap: () => _launchURL("mailto:miftahularif.dev@gmail.com"),
             ),
-            // _buildInfoCard(
-            //   icon: Icons.language,
-            //   title: "Website",
-            //   subtitle: "www.developerwebsite.com",
-            //   isClickable: true,
-            //   onTap: () => _launchURL("https://www.developerwebsite.com"),
-            // ),
+            const SizedBox(height: 16),
+            const SizedBox(
+              width: double.infinity,
+              child: Text("Donasi",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12)),
+            ),
+            const SizedBox(height: 8),
+            Image.asset(
+              'assets/logo/logo-ewallet.png',
+              width: 130,
+              // height: 120,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(height: 8),
+            const SizedBox(
+              width: double.infinity,
+              child: Text("0852-5088-7277",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12)),
+            ),
+            const SizedBox(height: 8),
 
             // Tombol kembali
             const SizedBox(height: 30),
-            // ElevatedButton.icon(
-            //   onPressed: () => Navigator.push(context),
-            //   icon: const Icon(Icons.arrow_back),
-            //   label: const Text("Kembali"),
-            //   style: ElevatedButton.styleFrom(
-            //     padding:
-            //         const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            //     backgroundColor: Colors.blueAccent,
-            //     foregroundColor: Colors.white,
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(15),
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(height: 30),
           ],
         ),
       ),
